@@ -11,6 +11,8 @@ cursor.execute("""
     last_login TEXT)""")
 
 conn.commit()
+
+
 conn.close()
 
 print("Created")

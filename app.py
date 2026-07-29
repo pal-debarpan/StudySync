@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = "study_sync_secret"
@@ -12,15 +13,30 @@ def home():
 def login():
     if request.method == 'POST':
         email = request.form["email"]
-        session["logged_in"] = True
-        session["email"] = email
-
         password = request.form["password"]
 
-        print(email)
-        print(password)
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
 
-        return redirect("/dashboard")
+        cursor.execute("""
+            SELECT * FROM users
+            WHERE email = ?
+            """, (email,))
+        user = cursor.fetchone()
+
+        if user is None:
+            conn.close()
+            return "Email does not exist"
+
+        if check_password_hash(user[3], password):
+            session["logged_in"] = True
+            session["email"] = email
+            conn.close()
+            return redirect("/dashboard")
+        else:
+            conn.close()
+            return "Incorrect password"
+        
 
     return render_template("login.html")
 
@@ -36,6 +52,7 @@ def signup():
         fullname = request.form["fullname"]
         email = request.form["email"]
         password = request.form["password"]
+        hashed_password = generate_password_hash(password)
 
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
@@ -44,7 +61,7 @@ def signup():
         try:
             cursor.execute("""
                         INSERT INTO users(fullname, email, password)
-                        VALUES(?, ?, ?)""", (fullname, email, password))
+                        VALUES(?, ?, ?)""", (fullname, email, hashed_password))
             conn.commit()
         except sqlite3.IntegrityError:
             return "Email already exists"
