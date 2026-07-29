@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login - StudySync
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <h1>Welcome Back!</h1>
+    <p>Login to continue your study journey.</p>
+
+
+    <form method="POST">
+        <input type="email" name="email" placeholder="Enter your email" required>
+
+        <br><br>
+
+        <input type="password" name="password" placeholder="Enter your password" required>
+
+        <br><br>
+
+        <button class="btn">Login</button>
+    </form>
+
+    {% if email %}
+    <h2>Welcome, {{ email }}!</h2>
+    {% endif %}
+
+</section>
+
+{% endblock %}

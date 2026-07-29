@@ -1,12 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudySync</title>
-</head>
-<body>
-    <h1>Welcome to StudySync</h1>
-    <p>Your one-stop solution for efficient studying!</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+Home - StudySync
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <h1>Study Smarter, Not Harder.</h1>
+    <p>
+        Organise your notes, assignments, tasks and study sessions in one place.
+    </p>
+    <button class="btn">Get Started</button>
+</section>
+
+<section class="features">
+    <h2>Why Choose StudySync</h2>
+    <div class="cards">
+        <div class="card">
+                        
+            <h3><i class="fa-solid fa-book"></i> Subjects</h3>
+            <p>Organise all your study subjects in one place.</p>
+        </div>
+
+        <div class="card">
+                        
+            <h3><i class="fa-solid fa-list-check"></i> Tasks</h3>
+            <p>Track assignments and never miss deadlines.</p>
+        </div>
+
+        <div class="card">
+                        
+            <h3><i class="fa-solid fa-clock"></i> Pomodoro</h3>
+            <p>Stay focused with a built-in Pomodoro timer.</p>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

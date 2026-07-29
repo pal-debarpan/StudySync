@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}StudySync{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design.css') }}">
+</head>
+<body>
+
+<header>
+    <h2 class="logo">StudySync</h2>
+
+    <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+{% block content %}
+
+{% endblock %}
+
+<footer>
+    <p>© 2026 StudySync</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard - StudySync
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <h1>Welcome {{ email }}!</h1>
+
+    <p>Manage your notes, assignments, and study sessions from one place.</p>
+
+</section>
+
+<section class="dashboard">
+
+    <div class="cards">
+
+        <div class="card">
+            <h3><i class="fa-solid fa-book"></i> Notes</h3>
+            <p>Store and organise all your study notes.</p>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-calendar"></i> Assignments</h3>
+            <p>Keep track of all your assignments.</p>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-clock"></i> Pomodoro Timer</h3>
+            <p>Stay focused with a built-in Pomodoro timer.</p>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-chart-line"></i> Progress</h3>
+            <p>View study progress.</p>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
