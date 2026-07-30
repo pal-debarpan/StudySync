@@ -85,5 +85,113 @@ def dashboard():
 
     return render_template("dashboard.html", email=session["email"])
 
+@app.route("/notes", methods=["GET", "POST"])
+def notes():
+    if not session.get("logged_in"):
+        return redirect("/login")
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT id FROM users
+    WHERE email = ?""", (session["email"],)
+    )
+    user = cursor.fetchone()
+
+    if request.method == "POST":
+        title = request.form["title"]
+        content = request.form["content"]
+
+        
+
+        cursor.execute("""
+        INSERT INTO notes(user_id, title, content)
+        VALUES(?, ?, ?)""", (user[0], title, content)
+        )
+
+        conn.commit()
+        conn.close()
+        return redirect("/notes")
+
+    cursor.execute("""
+    SELECT * FROM notes
+    WHERE user_id = ?""", (user[0],)
+    )
+    
+    notes = cursor.fetchall()
+    conn.close()
+    
+    return render_template("notes.html", notes=notes)
+
+@app.route("/edit_note/<int:note_id>", methods=["GET", "POST"])
+def edit_note(note_id):
+
+    if not session.get("logged_in"):
+        return redirect("/login")
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT id FROM users
+    WHERE email = ?""", (session["email"],)
+    )
+    user = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT * FROM notes
+    WHERE id = ?
+    AND user_id = ?""", (note_id, user[0])
+    )
+
+    note = cursor.fetchone()
+
+    if note is None:
+        conn.close()
+        return "Note not found"
+
+    if request.method == "POST":
+        title = request.form["title"]
+        content = request.form["content"]
+
+        cursor.execute("""
+        UPDATE notes
+        SET title = ?, content = ?
+        WHERE id = ?""", (title, content, note_id)
+        )
+
+        conn.commit()
+        conn.close()
+        return redirect("/notes")
+
+    conn.close()
+    return render_template("edit_note.html", note=note)
+
+@app.route("/delete_note/<int:note_id>", methods=["POST"])
+def delete_note(note_id):
+    if not session.get("logged_in"):
+        return redirect("/login")
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT id FROM users
+    WHERE email = ?""", (session["email"],)
+    )
+
+    user = cursor.fetchone()
+
+    cursor.execute("""
+    DELETE FROM notes
+    WHERE id = ?
+    AND user_id = ?""", (note_id, user[0])
+    )
+
+    conn.commit()
+    conn.close()
+    return redirect("/notes")
+
+
 if __name__ == "__main__":
     app.run(debug=True)

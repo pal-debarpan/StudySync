@@ -13,6 +13,15 @@ cursor.execute("""
 conn.commit()
 
 
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS notes(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id))"""
+)
+
 conn.close()
 
 print("Created")
