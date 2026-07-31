@@ -10,8 +10,6 @@ cursor.execute("""
     password TEXT NOT NULL,
     last_login TEXT)""")
 
-conn.commit()
-
 
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS notes(
@@ -22,6 +20,17 @@ cursor.execute("""
     FOREIGN KEY (user_id) REFERENCES users(id))"""
 )
 
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS assignments(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    title TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    due_date TEXT NOT NULL,
+    status TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id))"""
+)
+conn.commit()
 conn.close()
 
 print("Created")

@@ -192,6 +192,159 @@ def delete_note(note_id):
     conn.close()
     return redirect("/notes")
 
+@app.route("/assignments", methods=["GET","POST"])
+def assignments():
+    if not session.get("logged_in"):
+        return redirect("/login")
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT id FROM users
+    WHERE email = ?""", (session["email"],)
+    )
+
+    user = cursor.fetchone()
+
+    if request.method == "POST":
+        title = request.form["title"]
+        subject = request.form["subject"]
+        due_date = request.form["due_date"]
+        status = "Pending"
+
+        cursor.execute("""
+        INSERT INTO assignments(user_id, title, subject, due_date, status)
+        VALUES (?, ?, ?, ?, ?)""", (user[0], title, subject, due_date, status)
+        )
+
+        conn.commit()
+        conn.close()
+        return redirect("/assignments")
+
+    cursor.execute("""
+    SELECT * FROM assignments
+    WHERE user_id = ?""", (user[0],)
+    )
+
+    assignments = cursor.fetchall()
+    conn.close()
+    return render_template("assignments.html", assignments=assignments)
+
+@app.route("/edit_assignment/<int:assignment_id>", methods=["GET","POST"])
+def edit_assignment(assignment_id):
+    if not session.get("logged_in"):
+        return redirect("/login")
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT id FROM users
+    WHERE email = ?""", (session["email"],)
+    )
+
+    user = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT * FROM assignments
+    WHERE id = ?
+    AND user_id = ?""", (assignment_id, user[0])
+    )
+
+    assignment = cursor.fetchone()
+
+    if assignment is None:
+        conn.close()
+        return "Assignment not found"
+
+    if request.method == "POST":
+        title = request.form["title"]
+        subject = request.form["subject"]
+        due_date = request.form["due_date"]
+
+        cursor.execute("""
+        UPDATE assignments
+        SET title = ?, subject = ?, due_date = ?
+        WHERE id = ?
+        AND user_id = ?""", (title, subject, due_date, assignment_id, user[0])
+        )
+
+        conn.commit()
+        conn.close()
+        return redirect("/assignments")
+    return render_template("edit_assignment.html", assignment=assignment)
+
+
+@app.route("/delete_assignment/<int:assignment_id>", methods=["POST"])
+def delete_assignment(assignment_id):
+    if not session.get("logged_in"):
+        return redirect("/login")
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT id FROM users
+    WHERE email = ?""", (session["email"],)
+    )
+
+    user = cursor.fetchone()
+
+    cursor.execute("""
+    DELETE FROM assignments
+    WHERE id = ?
+    AND user_id = ?""", (assignment_id, user[0])
+    )
+
+    conn.commit()
+    conn.close()
+    return redirect("/assignments")
+
+
+@app.route("/toggle_assignment/<int:assignment_id>", methods=["POST"])
+def toggle_assignment(assignment_id):
+    if not session.get("logged_in"):
+        return redirect("/login")
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT id FROM users
+    WHERE email = ?""", (session["email"],)
+    )
+
+    user = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT * FROM assignments
+    WHERE id = ?
+    AND user_id = ?""", (assignment_id, user[0])
+    )
+
+    assignment = cursor.fetchone()
+
+    if assignment is None:
+        conn.close()
+        return "Assignment not found"
+
+    if assignment[5] == "Pending":
+        status = "Completed"
+    else:
+        status = "Pending"
+
+    cursor.execute("""
+    UPDATE assignments
+    SET status = ?
+    WHERE id = ?
+    AND user_id = ?""", (status, assignment_id, user[0])
+    )
+
+    conn.commit()
+    conn.close()
+    return redirect("/assignments")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
