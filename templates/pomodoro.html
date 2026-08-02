@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+Pomodoro - StudySync
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <h1>🍅 Pomodoro Timer</h1>
+    <p>Stay focused using the Pomodoro technique.</p>
+    <br>
+    <div class="card">
+        <h2 id="sessionTitle">🍅 Work Session</h2>
+        <h1 id="timer">25:00</h1>
+        <button id="mainButton" class="btn">▶ Start</button>
+        <button id="resetButton" class="btn" style="display: none;">🔄 Reset</button>
+    </div>
+    <div id="notification" class="notification">Notification</div>
+    <br>
+    <hr>
+
+    <h2>⚙ Timer Settings</h2>
+
+    <form id="settingsForm">
+
+        <label for="workTime">Work Duration (minutes)</label>
+        <br>
+        <input
+            type="number"
+            id="workTime"
+            min="1"
+            value="25"
+            required>
+        <br><br>
+
+        <label for="breakTime">Break Duration (minutes)</label>
+        <br>
+        <input
+            type="number"
+            id="breakTime"
+            min="1"
+            value="5"
+            required>
+        <br><br>
+
+        <button id="saveSettingsButton" class="btn">Save Settings</button>
+
+    </form>
+
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='js/timer.js') }}"></script>
+
+{% endblock %}
+

@@ -134,3 +134,15 @@ header h2{
 .card-link:hover{
     text-decoration: none;
 }
+
+.notification{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}

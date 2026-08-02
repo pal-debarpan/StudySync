@@ -346,5 +346,13 @@ def toggle_assignment(assignment_id):
     return redirect("/assignments")
 
 
+@app.route("/pomodoro")
+def pomodoro():
+    if not session.get("logged_in"):
+        return redirect("/login")
+
+    return render_template("pomodoro.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
