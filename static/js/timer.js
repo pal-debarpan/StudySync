@@ -125,4 +125,3 @@ saveSettingsButton.addEventListener("click", function(event){
 
     updateTimerDisplay();
 });
-
