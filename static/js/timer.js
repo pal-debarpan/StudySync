@@ -11,6 +11,7 @@ let completedSessionsText = document.getElementById("completedSessions");
 let totalFocusTimeText = document.getElementById("totalFocusTime");
 let progressFill = document.getElementById("progressFill");
 let progressText = document.getElementById("progressText");
+let timerProgress = document.getElementById("timerProgress");
 
 let dailyGoal = 10;
 
@@ -27,6 +28,24 @@ let timerState = "idle";
 let sessionType = "work";
 
 let interval;
+
+function updateProgressRing() {
+    let circumference = 628;
+    timerProgress.style.strokeDasharray = circumference;
+    timerProgress.style.strokeDashoffset = 0;
+    let totalSeconds;
+    if (sessionType === "work"){
+        totalSeconds = workMinutes * 60;
+    }
+    else{
+        totalSeconds = breakMinutes * 60;
+    }
+
+    let remainingSeconds = (minutes * 60) + seconds;
+    let progress = remainingSeconds / totalSeconds;
+    let offset = circumference * (1-progress);
+    timerProgress.style.strokeDashoffset = offset;
+};
 
 function updateProgress(){
     let percentage = (completedSessions/dailyGoal) * 100;
@@ -83,6 +102,7 @@ function startTimer(){
         if (minutes == 0 && seconds == 0){
             switchSessions();
             updateTimerDisplay();
+            updateProgressRing;
             return;
         }
         else{
@@ -95,6 +115,7 @@ function startTimer(){
         }
         
         updateTimerDisplay();
+        updateProgressRing();
     }, 1000);
 };
 
@@ -126,6 +147,7 @@ resetButton.addEventListener("click", function() {
     minutes = workMinutes;
     seconds = 0;
     updateTimerDisplay();
+    updateProgressRing();
     timerState = "idle";
     mainButton.innerText = "▶ Start";
     resetButton.style.display = "none";
@@ -149,4 +171,5 @@ saveSettingsButton.addEventListener("click", function(event){
     seconds = 0;
 
     updateTimerDisplay();
+    updateProgressRing();
 });

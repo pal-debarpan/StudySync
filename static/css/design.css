@@ -161,3 +161,34 @@ header h2{
     background: #4CAF50;
     transition: width .4s;
 }
+
+.timer-container{
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: auto;
+}
+
+.timer-container svg{
+    transform: rotate(-90deg);
+}
+
+.timer-background{
+    fill: none;
+    stroke: #ddd;
+    stroke-width: 12;
+}
+
+.timer-progress{
+    fill: none;
+    stroke: #4CAF50;
+    stroke-width: 12;
+    stroke-linecap: round;
+}
+
+.timer-container h1{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

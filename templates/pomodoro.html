@@ -11,9 +11,18 @@ Pomodoro - StudySync
     <h1>🍅 Pomodoro Timer</h1>
     <p>Stay focused using the Pomodoro technique.</p>
     <br>
+    
     <div class="card">
         <h2 id="sessionTitle">🍅 Work Session</h2>
-        <h1 id="timer">25:00</h1>
+        <div class="timer-container">
+            <svg width="250" height="250">
+            <circle class="timer-background" cx="125" cy="125" r="100">
+            </circle>
+            <circle id="timerProgress" class="timer-progress" cx="125" cy="125" r="100">
+            </circle>
+            </svg>
+            <h1 id="timer">25:00</h1>
+        </div>
         <button id="mainButton" class="btn">▶ Start</button>
         <button id="resetButton" class="btn" style="display: none;">🔄 Reset</button>
     </div>
