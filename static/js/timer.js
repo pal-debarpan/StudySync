@@ -6,9 +6,19 @@ let breakTimeInput = document.getElementById("breakTime");
 let saveSettingsButton = document.getElementById("saveSettingsButton");
 let sessionTitle = document.getElementById("sessionTitle");
 let notification = document.getElementById("notification");
+let notificationSound = new Audio("/static/sounds/notification.mp3");
+let completedSessionsText = document.getElementById("completedSessions");
+let totalFocusTimeText = document.getElementById("totalFocusTime");
+let progressFill = document.getElementById("progressFill");
+let progressText = document.getElementById("progressText");
+
+let dailyGoal = 10;
 
 let workMinutes = 25;
 let breakMinutes = 5;
+
+let completedSessions = 0;
+let totalFocusTime = 0;
 
 let minutes = workMinutes;
 let seconds = 0;
@@ -18,9 +28,19 @@ let sessionType = "work";
 
 let interval;
 
+function updateProgress(){
+    let percentage = (completedSessions/dailyGoal) * 100;
+    progressFill.style.width = percentage + "%";
+    progressText.innerText = completedSessions + " / " + dailyGoal + " Sessions (" + percentage + "%)";
+};
+
 function showNotification(message){
     notification.innerText = message;
     notification.style.display = "block";
+
+    notificationSound.currentTime = 0;
+    notificationSound.play();
+
     setTimeout(function(){
         notification.style.display = "none";
     }, 3000);
@@ -37,6 +57,11 @@ function updateTimerDisplay() {
 
 function switchSessions() {
     if (sessionType === "work"){
+        completedSessions++;
+        totalFocusTime += workMinutes;
+        updateProgress();
+        completedSessionsText.innerText = completedSessions;
+        totalFocusTimeText.innerText = totalFocusTime;
         showNotification("🍅 Work session complete!\nTime for a break ☕");
         sessionType = "break";
         minutes = breakMinutes;
