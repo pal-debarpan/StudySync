@@ -1,11 +1,11 @@
-# StudySync
+StudySync
 
 A study management web application.
 
-## Built with
+Built with
 
-- Python
-- Flask
-- SQLite
+Python
+Flask
+SQLite
 
 Author: Debarpan Pal
