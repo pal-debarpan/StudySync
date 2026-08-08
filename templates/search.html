@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}
+Search - StudySync
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <h1>Search Results</h1>
+
+    <p>Results for "<strong>{{ query }}</strong>"</p>
+
+</section>
+
+<section class="dashboard-widgets">
+
+    <div class="widget">
+
+        <h2>📝 Notes</h2>
+
+        {% if notes %}
+
+            {% for note in notes %}
+
+                <div class="widget-item">
+
+                    <h3>{{ note[0] }}</h3>
+
+                    <p>{{ note[1][:120] }}...</p>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>No matching notes found.</p>
+
+        {% endif %}
+
+    </div>
+
+    <div class="widget">
+
+        <h2>📚 Assignments</h2>
+
+        {% if assignments %}
+
+            {% for assignment in assignments %}
+
+                <div class="widget-item">
+
+                    <h3>{{ assignment[0] }}</h3>
+
+                    <p><strong>Subject:</strong> {{ assignment[1] }}</p>
+
+                    <p><strong>Due:</strong> {{ assignment[2] }}</p>
+
+                    <p><strong>Status:</strong> {{ assignment[3] }}</p>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>No matching assignments found.</p>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

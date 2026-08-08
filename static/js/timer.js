@@ -74,8 +74,28 @@ function updateTimerDisplay() {
     }
 };
 
+function savePomodoroSession() {
+    if (assignmentId === null){
+        return;
+    }
+    fetch("/update_pomodoro", {method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            assignment_id: assignmentId
+        })
+
+    })
+    .then(response => response.json())
+    .then(data => {
+        showNotification("🍅 Pomodoro saved!");
+    });
+};
+
 function switchSessions() {
     if (sessionType === "work"){
+        savePomodoroSession();
         completedSessions++;
         totalFocusTime += workMinutes;
         updateProgress();

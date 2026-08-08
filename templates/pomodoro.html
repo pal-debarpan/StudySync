@@ -7,81 +7,98 @@ Pomodoro - StudySync
 {% block content %}
 
 <section class="hero">
-
-    <h1>🍅 Pomodoro Timer</h1>
-    <p>Stay focused using the Pomodoro technique.</p>
-    <br>
-    
-    <div class="card">
-        <h2 id="sessionTitle">🍅 Work Session</h2>
-        <div class="timer-container">
-            <svg width="250" height="250">
-            <circle class="timer-background" cx="125" cy="125" r="100">
-            </circle>
-            <circle id="timerProgress" class="timer-progress" cx="125" cy="125" r="100">
-            </circle>
-            </svg>
-            <h1 id="timer">25:00</h1>
+    <div class="page-container">
+        <h1>🍅 Pomodoro Timer</h1>
+        <p>Stay focused using the Pomodoro technique.</p>
+        <br>
+        
+        <div class="page-card">
+            <h2 id="sessionTitle">🍅 Work Session</h2>
+            {% if assignment %}
+                <h2>📚 Working on: {{ assignment[2] }}</h2>
+            {% else %}
+                <h2>🍅 General Focus Session</h2>
+            {% endif %}
+            <div class="timer-container">
+                <svg width="250" height="250">
+                <circle class="timer-background" cx="125" cy="125" r="100">
+                </circle>
+                <circle id="timerProgress" class="timer-progress" cx="125" cy="125" r="100">
+                </circle>
+                </svg>
+                <h1 id="timer">25:00</h1>
+            </div>
+            <button id="mainButton" class="btn">▶ Start</button>
+            <button id="resetButton" class="btn" style="display: none;">🔄 Reset</button>
         </div>
-        <button id="mainButton" class="btn">▶ Start</button>
-        <button id="resetButton" class="btn" style="display: none;">🔄 Reset</button>
-    </div>
-    <div id="notification" class="notification">Notification</div>
-    <br>
-    <hr>
-
-    <div class="card">
-        <h2>📊 Today's Progress</h2>
-        <p>
-            🍅 Sessions Completed:
-            <span id="completedSessions">0</span>
-        </p>
-
-        <p>
-            ⏱ Total Focus Time:
-            <span id="totalFocusTime">0</span> minutes
-        </p>
-    </div>
-    <h3>Daily Goal</h3>
-    <div class="progress-bar">
-        <div id="progressFill" class="progress-fill"></div>
-    </div>
-    <p id="progressText">0 / 10 Sessions (0%)</p>
-
-    <h2>⚙ Timer Settings</h2>
-
-    <form id="settingsForm">
-
-        <label for="workTime">Work Duration (minutes)</label>
+        <div id="notification" class="notification">Notification</div>
         <br>
-        <input
-            type="number"
-            id="workTime"
-            min="1"
-            value="25"
-            required>
-        <br><br>
-
-        <label for="breakTime">Break Duration (minutes)</label>
         <br>
-        <input
-            type="number"
-            id="breakTime"
-            min="1"
-            value="5"
-            required>
-        <br><br>
 
-        <button id="saveSettingsButton" class="btn">Save Settings</button>
+        <div class="page-card">
+            <h2>📊 Today's Progress</h2>
+            <p>
+                🍅 Sessions Completed:
+                <span id="completedSessions">0</span>
+            </p>
 
-    </form>
+            <p>
+                ⏱ Total Focus Time:
+                <span id="totalFocusTime">0</span> minutes
+            </p>
+        </div>
+        <h3>Daily Goal</h3>
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <p id="progressText">0 / 10 Sessions (0%)</p>
 
 
+        <div class="sett">
+            <h2><i class="fa-solid fa-gear"></i> Timer Settings</h2>
+
+            <form id="settingsForm" class="timer-form">
+
+                <label for="workTime">Work Duration (minutes)</label>
+                
+                <input
+                    type="number"
+                    id="workTime"
+                    min="1"
+                    value="25"
+                    required>
+                
+
+                <label for="breakTime">Break Duration (minutes)</label>
+                
+                <input
+                    type="number"
+                    id="breakTime"
+                    min="1"
+                    value="5"
+                    required>
+                <br>
+
+                <button id="saveSettingsButton" class="btn">Save Settings</button>
+
+            </form>
+        </div>
+
+    </div>
 </section>
 
 {% endblock %}
 
 {% block scripts %}
+
+<script>
+    const assignmentId = 
+    {% if assignment %}
+        {{ assignment[0] }}
+    {% else %}
+        null
+    {% endif %};
+</script>
 
 <script src="{{ url_for('static', filename='js/timer.js') }}"></script>
 

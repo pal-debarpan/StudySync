@@ -6,51 +6,516 @@ Dashboard - StudySync
 
 {% block content %}
 
-<section class="hero">
+<div class="dashboard-wrapper">
 
-    <h1>Welcome {{ email }}!</h1>
+    <section class="hero">
 
-    <p>Manage your notes, assignments, and study sessions from one place.</p>
+        <div class="dashboard-hero">
 
-</section>
+            <div>
 
-<section class="dashboard">
+                <span class="dashboard-badge">
+                    🚀 Productivity Workspace
+                </span>
 
-    <div class="cards">
-        <a href="/notes" class="card-link">
+                <h1>
 
-            <div class="card">
+                    Welcome back,
+                    <span>{{ fullname }}</span>
 
-                <h3><i class="fa-solid fa-book"></i> Notes</h3>
-                <p>Store and organise all your study notes.</p>
+                </h1>
+
+                <p>
+
+                    Stay organized, complete assignments,
+                    and keep your learning momentum going.
+
+                </p>
 
             </div>
-        </a>
 
-
-        <a href="/assignments" class="card-link">
-            <div class="card">
-                
-                <h3><i class="fa-solid fa-calendar"></i> Assignments</h3>
-                <p>Keep track of all your assignments.</p>
-            </div>
-        </a>
-
-        <a href="/pomodoro" class="card-link">
-            <div class="card">
-                <h3><i class="fa-solid fa-clock"></i> Pomodoro Timer</h3>
-                <p>Stay focused with a built-in Pomodoro timer.</p>        
-            </div>
-        </a>
-
-
-        <div class="card">
-            <h3><i class="fa-solid fa-chart-line"></i> Progress</h3>
-            <p>View study progress.</p>
         </div>
 
-    </div>
+    </section>
 
-</section>
+    <section class="search-section">
+
+        <form action="{{ url_for('search') }}" method="GET">
+
+            <input
+                type="text"
+                name="query"
+                placeholder="🔍 Search notes and assignments..."
+                required>
+
+            <button class="btn">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+            </button>
+
+        </form>
+
+    </section>
+
+    <section class="overview">
+
+        <h2>📊 Today's Overview</h2>
+
+        <div class="overview-grid">
+
+            <div class="overview-card">
+
+                <div class="overview-icon">
+
+                    <i class="fa-solid fa-book"></i>
+
+                </div>
+
+                <h3>{{ notes_count }}</h3>
+
+                <p>Notes</p>
+
+            </div>
+
+            <div class="overview-card">
+
+                <div class="overview-icon">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                </div>
+
+                <h3>{{ assignments_count }}</h3>
+
+                <p>Assignments</p>
+
+            </div>
+
+            <div class="overview-card">
+
+                <div class="overview-icon">
+
+                    <i class="fa-solid fa-fire"></i>
+
+                </div>
+
+                <h3>{{ total_pomodoros }}</h3>
+
+                <p>Focus Sessions</p>
+
+            </div>
+
+            <div class="overview-card">
+
+                <div class="overview-icon">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                </div>
+
+                <h3>{{ completion_rate }}%</h3>
+
+                <p>Completed</p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="dashboard-charts">
+
+        <div class="chart-card">
+
+            <h2>📚 Assignment Status</h2>
+
+            <canvas id="assignmentChart"></canvas>
+
+        </div>
+
+        <div class="chart-card">
+
+            <h2>📊 Study Overview</h2>
+
+            <canvas id="overviewChart"></canvas>
+
+        </div>
+
+    </section>
+
+    <section class="quick-actions">
+
+        <h2>⚡ Quick Actions</h2>
+
+        <div class="quick-grid">
+
+            <a href="{{ url_for('notes') }}" class="quick-card">
+
+                <i class="fa-solid fa-note-sticky"></i>
+
+                <h3>New Note</h3>
+
+                <p>Create and organize study notes.</p>
+
+            </a>
+
+            <a href="{{ url_for('assignments') }}" class="quick-card">
+
+                <i class="fa-solid fa-calendar-plus"></i>
+
+                <h3>Add Assignment</h3>
+
+                <p>Track a new assignment.</p>
+
+            </a>
+
+            <a href="{{ url_for('pomodoro') }}" class="quick-card">
+
+                <i class="fa-solid fa-clock"></i>
+
+                <h3>Start Focus</h3>
+
+                <p>Begin a Pomodoro session.</p>
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <section class="dashboard-widgets">
+
+        <div class="widget">
+
+            <h2>📅 Upcoming Assignments</h2>
+
+            {% if upcoming_assignments %}
+
+                {% for assignment in upcoming_assignments %}
+
+                    <div class="widget-item">
+
+                        <div>
+
+                            <h3>{{ assignment[0] }}</h3>
+
+                            <p>{{ assignment[1] }}</p>
+
+                        </div>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>No upcoming assignments 🎉</p>
+
+            {% endif %}
+
+        </div>
+
+        <div class="widget">
+
+            <h2>📝 Recent Notes</h2>
+
+            {% if recent_notes %}
+
+                {% for note in recent_notes %}
+
+                    <div class="widget-item">
+
+                        <div>
+
+                            <h3>{{ note[0] }}</h3>
+
+                        </div>
+
+                        <i class="fa-solid fa-file-lines"></i>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>No notes yet 📝</p>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+const darkMode = document.body.classList.contains("dark-mode");
+
+const textColor = darkMode ? "#E2E8F0" : "#475569";
+
+Chart.defaults.color = textColor;
+Chart.defaults.font.family = "Inter";
+
+
+
+const assignmentChart = document.getElementById("assignmentChart");
+
+new Chart(assignmentChart,{
+
+    type:"doughnut",
+
+    data:{
+
+        labels:["Completed","Pending"],
+
+        datasets:[{
+
+            data:[
+                {{ completed_assignments }},
+                {{ pending_assignments }}
+            ],
+
+            backgroundColor:[
+                "#22C55E",
+                "#F59E0B"
+            ],
+
+            hoverBackgroundColor:[
+                "#16A34A",
+                "#D97706"
+            ],
+
+            borderWidth:0,
+
+            hoverOffset:14
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        cutout:"72%",
+
+        animation:{
+            duration:1200,
+            easing:"easeOutQuart"
+        },
+
+        plugins:{
+
+            legend:{
+
+                position:"bottom",
+
+                labels:{
+
+                    padding:25,
+
+                    usePointStyle:true,
+
+                    pointStyle:"circle",
+
+                    boxWidth:12,
+
+                    font:{
+                        size:13,
+                        weight:"600"
+                    }
+
+                }
+
+            },
+
+            tooltip:{
+
+                backgroundColor: darkMode ? "#0F172A" : "#1E293B",
+
+                titleColor:"#ffffff",
+
+                bodyColor:"#ffffff",
+
+                cornerRadius:12,
+
+                padding:14,
+
+                displayColors:true
+
+            }
+
+        }
+
+    }
+
+});
+
+
+
+const overviewChart = document.getElementById("overviewChart");
+
+new Chart(overviewChart,{
+
+    type:"bar",
+
+    data:{
+
+        labels:[
+            "Notes",
+            "Assignments",
+            "Pomodoros"
+        ],
+
+        datasets:[{
+
+            label:"Total",
+
+            data:[
+
+                {{ notes_count }},
+                {{ assignments_count }},
+                {{ total_pomodoros }}
+
+            ],
+
+            backgroundColor:[
+
+                "#60A5FA",
+                "#A855F7",
+                "#FB923C"
+
+            ],
+
+            hoverBackgroundColor:[
+
+                "#3B82F6",
+                "#8B5CF6",
+                "#F97316"
+
+            ],
+
+            borderRadius:14,
+
+            borderSkipped:false,
+
+            maxBarThickness:70
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        animation:{
+
+            duration:1400,
+
+            easing:"easeOutQuart"
+
+        },
+
+        plugins:{
+
+            legend:{
+                display:false
+            },
+
+            tooltip:{
+
+                backgroundColor: darkMode ? "#0F172A" : "#1E293B",
+
+                titleColor:"#ffffff",
+
+                bodyColor:"#ffffff",
+
+                cornerRadius:12,
+
+                padding:14
+
+            }
+
+        },
+
+        scales:{
+
+            x:{
+
+                grid:{
+                    display:false
+                },
+
+                border:{
+                    display:false
+                },
+
+                ticks:{
+
+                    color:textColor,
+
+                    font:{
+
+                        size:13,
+
+                        weight:"600"
+
+                    }
+
+                }
+
+            },
+
+            y:{
+
+                beginAtZero:true,
+
+                border:{
+                    display:false
+                },
+
+                grid:{
+
+                    color: darkMode
+                        ? "rgba(255,255,255,.08)"
+                        : "rgba(148,163,184,.12)",
+
+                    drawTicks:false
+
+                },
+
+                ticks:{
+
+                    stepSize:1,
+
+                    color:textColor,
+
+                    padding:10
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
 
 {% endblock %}

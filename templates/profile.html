@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile - StudySync
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+<div class="profile-avatar">
+
+    {{ fullname[0]|upper }}
+
+</div>
+
+<h1>{{ fullname }}</h1>
+
+    <p>{{ email }}</p>
+
+</section>
+
+<section class="dashboard-widgets">
+
+    <div class="widget">
+
+        <h2>Account</h2>
+
+        <div class="widget-item">
+            <h3>📧 Email</h3>
+            <p>{{ email }}</p>
+        </div>
+
+        <div class="widget-item">
+            <h3>🕒 Last Login</h3>
+            <p>
+                {% if last_login %}
+                    {{ last_login }}
+                {% else %}
+                    First Login
+                {% endif %}
+            </p>
+        </div>
+
+    </div>
+
+    <div class="widget">
+
+        <h2>Study Statistics</h2>
+
+        <div class="widget-item">
+            <h3>📝 Notes</h3>
+            <p>{{ notes_count }}</p>
+        </div>
+
+        <div class="widget-item">
+            <h3>📚 Assignments</h3>
+            <p>{{ assignment_count }}</p>
+        </div>
+
+        <div class="widget-item">
+            <h3>🍅 Focus Sessions</h3>
+            <p>{{ total_pomodoros }}</p>
+        </div>
+
+        <div class="widget-item">
+            <h3>✅ Completion Rate</h3>
+            <p>{{ completion_rate }}%</p>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -6,36 +6,73 @@ Home - StudySync
 
 {% block content %}
 
-<section class="hero">
-    <h1>Study Smarter, Not Harder.</h1>
-    <p>
-        Organise your notes, assignments, tasks and study sessions in one place.
-    </p>
-    <button class="btn">Get Started</button>
-</section>
+<div class="page-container">
 
-<section class="features">
-    <h2>Why Choose StudySync</h2>
-    <div class="cards">
-        <div class="card">
-                        
-            <h3><i class="fa-solid fa-book"></i> Subjects</h3>
-            <p>Organise all your study subjects in one place.</p>
+    <section class="hero">
+
+        <span class="hero-badge">
+            🚀 Your Personal Study Companion
+        </span>
+
+        <h1>
+
+            Study Smarter.<br>
+            Stay Organized.<br>
+            Achieve More.
+
+        </h1>
+
+        <p>
+
+            Notes, Assignments, Pomodoro Focus Sessions,
+            Analytics and Progress Tracking —
+            all in one beautiful workspace.
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="{{ url_for('signup') }}" class="btn">
+
+                Get Started →
+
+            </a>
+
+            <a href="#features" class="btn secondary">
+
+                Learn More
+
+            </a>
+
         </div>
 
-        <div class="card">
-                        
-            <h3><i class="fa-solid fa-list-check"></i> Tasks</h3>
-            <p>Track assignments and never miss deadlines.</p>
-        </div>
+    </section>
 
-        <div class="card">
-                        
-            <h3><i class="fa-solid fa-clock"></i> Pomodoro</h3>
-            <p>Stay focused with a built-in Pomodoro timer.</p>
-        </div>
+    <section class="features">
+        <h2>Why Choose StudySync</h2>
+        <br><br>
+        <div class="cards">
+            <div class="card">
+                            
+                <h3><i class="fa-solid fa-book"></i> Subjects</h3>
+                <p>Organise all your study subjects in one place.</p>
+            </div>
 
-    </div>
-</section>
+            <div class="card">
+                            
+                <h3><i class="fa-solid fa-list-check"></i> Tasks</h3>
+                <p>Track assignments and never miss deadlines.</p>
+            </div>
+
+            <div class="card">
+                            
+                <h3><i class="fa-solid fa-clock"></i> Pomodoro</h3>
+                <p>Stay focused with a built-in Pomodoro timer.</p>
+            </div>
+
+        </div>
+    </section>
+
+</div>
 
 {% endblock %}

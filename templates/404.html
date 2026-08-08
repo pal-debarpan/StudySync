@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+404 - StudySync
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <h1>404</h1>
+
+    <p>Oops! The page you're looking for doesn't exist.</p>
+
+    <br>
+
+    <a href="{{ url_for('dashboard') }}" class="btn">
+
+        ← Back to Dashboard
+
+    </a>
+
+</section>
+
+{% endblock %}

@@ -4,32 +4,196 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}StudySync{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/design.css') }}">
 </head>
-<body>
+<body data-page="{% block page %}{% endblock %}">
 
 <header>
-    <h2 class="logo">StudySync</h2>
+    <h2 class="logo">
+        <a href="{{ url_for('home') }}">StudySync</a>
+    </h2>
 
     <nav class="nav-links">
-        <a href="/">Home</a>
-        <a href="/login">Login</a>
-        <a href="/signup">Sign Up</a>
-        <a href="/logout">Logout</a>
+
+        {% if session.get("logged_in") %}
+
+            <a
+                href="{{ url_for('profile') }}"
+                class="{% if active_page == 'profile' %}active{% endif %}">
+                👤 Profile
+            </a>
+            
+
+            <a 
+                href="{{ url_for('dashboard') }}"
+                class="{% if active_page == 'dashboard' %}active{% endif %}">
+                🏠 Dashboard
+            </a>
+
+            <a 
+                href="{{ url_for('notes') }}"
+                class="{% if active_page == 'notes' %}active{% endif %}">
+                📝 Notes
+            </a>
+
+            <a
+                href="{{ url_for('assignments') }}"
+                class="{% if active_page == 'assignments' %}active{% endif %}">
+                📚 Assignments
+            </a>
+
+            <a
+                href="{{ url_for('pomodoro') }}"
+                class="{% if active_page == 'pomodoro' %}active{% endif %}">
+                🍅 Pomodoro
+            </a>
+
+            <button id="themeToggle" class="theme-toggle">
+
+                <i class="fa-solid fa-moon"></i>
+
+            </button>
+
+            <a href="{{ url_for('logout') }}">🚪 Logout</a>
+
+        {% else %}
+
+            <a 
+                href="{{ url_for('home') }}"
+                class="{% if active_page == 'home' %}active{% endif %}">
+                Home
+            </a>
+
+            <a 
+                href="{{ url_for('login') }}"
+                class="{% if active_page == 'login' %}active{% endif %}">
+                Login
+            </a>
+
+            <a 
+                href="{{ url_for('signup') }}"
+                class="{% if active_page == 'signup' %}active{% endif %}">
+                Sign Up
+            </a>
+
+        {% endif %}
+
     </nav>
 </header>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        <div class="flash-container">
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+
+                    {% if category == "success" %}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {% elif category == "error" %}
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    {% elif category == "warning" %}
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    {% endif %}
+
+                    <span>{{ message }}</span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
 {% block content %}
-
-{% endblock %}
-
-{% block scripts %}
 
 {% endblock %}
 
 <footer>
     <p>© 2026 StudySync</p>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    const flashes = document.querySelectorAll(".flash");
+
+    flashes.forEach(function(flash){
+
+        setTimeout(function(){
+
+            flash.style.opacity = "0";
+            flash.style.transform = "translateY(-10px)";
+
+            setTimeout(function(){
+                flash.remove();
+            },300);
+
+        },3000);
+
+    });
+
+});
+</script>
+
+
+<script>
+
+const themeToggle = document.getElementById("themeToggle");
+
+const body = document.body;
+
+const icon = themeToggle.querySelector("i");
+
+if(localStorage.getItem("theme") === "dark"){
+
+    body.classList.add("dark-mode");
+
+    icon.classList.remove("fa-moon");
+    icon.classList.add("fa-sun");
+
+}
+
+themeToggle.addEventListener("click", function(){
+
+    body.classList.toggle("dark-mode");
+
+    if(body.classList.contains("dark-mode")){
+
+        localStorage.setItem("theme","dark");
+
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+
+    }
+
+    else{
+
+        localStorage.setItem("theme","light");
+
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
+
+    }
+
+});
+
+</script>
+
+{% block scripts %}
+{% endblock %}
+
 </body>
 </html>
